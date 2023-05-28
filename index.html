@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>POC - Telegram</title>
+</head>
+<body>
+  <h2>Login</h2>
+  <form id="loginForm">
+    <input type="text" id="phoneNumber" name="phoneNumber" placeholder="Phone Number">
+    <button type="submit">Fazer Login</button>
+  </form>
+
+  <br><br><hr><br>
+
+  <h2>Validar Auth Code</h2>
+  <form id="authCodeForm">
+    <input type="text" id="authCode" name="authCode" placeholder="Auth Code">
+    <button type="submit">Validar</button>
+  </form>
+
+  <br><br><hr><br>
+
+  <h2>Usuário</h2>
+  <div id="user" style="overflow-wrap: break-word;"></div>
+  
+  <br><br><hr><br>
+
+  <h2>Chats</h2>
+  <div id="chats"></div>
+  <br>
+  <button id="obterChats">Obter chats</button>
+
+  <script>
+    document.getElementById("loginForm").addEventListener("submit", function(event) {
+      event.preventDefault();
+      
+      const phoneNumber = document.getElementById("phoneNumber").value;
+      
+      fetch("http://localhost:3001/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ phoneNumber })
+      })
+      .then(response => response.text())
+      .then(data => {
+        console.log('Ok, Valide o Auth Code')
+      })
+      .catch(error => console.error(error));
+    });
+  </script>
+
+  <script>
+    document.getElementById("authCodeForm").addEventListener("submit", function(event) {
+      event.preventDefault();
+      
+      const phoneNumber = document.getElementById("phoneNumber").value;
+      const authCode = document.getElementById("authCode").value;
+      
+      fetch("http://localhost:3001/authorization", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ phoneNumber, authCode })
+      })
+      .then(response => response.text())
+      .then(data => {
+        document.querySelector('#user').innerText = data
+      })
+      .catch(error => console.error(error));
+    });
+  </script>
+
+  <script>
+
+    document.querySelector('#obterChats').addEventListener("click", function(event) {
+      event.preventDefault();
+
+      fetch("http://localhost:3001/get-chats", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json"
+        },
+      })
+      .then(response => response.json())
+      .then(data => {
+        console.log(data)
+        
+        const html = data.map(chat => {
+          return `
+            <h4>${chat.title}</h4>
+            <img src="data:image/jpeg;base64,${chati.photo?.minthumbnail?.data || ''}" width="40" height="40" />
+            <br><hr>
+          `
+        }).join('')
+
+        document.querySelector('#chats').innerHTML = html
+      })
+    })
+  </script>
+
+</body>
+</html>

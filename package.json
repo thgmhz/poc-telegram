@@ -1,0 +1,18 @@
+{
+  "name": "poc-telegram",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2",
+    "nodemon": "^2.0.22",
+    "prebuilt-tdlib": "^0.1008012.0",
+    "tdl": "^7.2.0",
+    "tdl-tdlib-addon": "^1.2.2"
+  }
+}
